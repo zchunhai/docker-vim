@@ -1,13 +1,17 @@
 FROM ubuntu:18.04
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt update && apt install -y software-properties-common
+RUN add-apt-repository ppa:jonathonf/vim \
+    && add-apt-repository ppa:deadsnakes/ppa \
+    && apt update \
+    && apt install -y --no-install-recommends \
 		sudo git \
 		wget curl ca-certificates \
 		make g++ gcc libc6-dev \
 		locales pkg-config \
         vim ctags silversearcher-ag \
-        python3.6 python3.6-distutils \
-    && cd /usr/bin && ln -s pydoc3.6 pydoc && ln -s python3.6 python \
+        python3.8 python3.8-distutils \
+    && cd /usr/bin && ln -s pydoc3.8 pydoc && ln -s python3.8 python \
     && rm -rf /var/lib/apt/lists/*
 
 # Set the locale

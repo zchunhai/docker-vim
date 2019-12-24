@@ -1,9 +1,9 @@
 #!/bin/bash
 set -eux
 
-GOLANG_VERSION=1.12.6
+GOLANG_VERSION=1.13.5
 goRelArch="linux-amd64"
-goRelSha256="dbcf71a3c1ea53b8d54ef1b48c85a39a6c9a935d01fc8291ff2b92028e59913c"
+goRelSha256="512103d7ad296467814a6e3f635631bd35574cab3369a97a323c9a585ccaa569"
 url="https://golang.org/dl/go${GOLANG_VERSION}.${goRelArch}.tar.gz"
 
 wget -O go.tgz "$url" && echo "${goRelSha256} *go.tgz" | sha256sum -c -
@@ -19,12 +19,12 @@ go get -u -buildmode=exe -ldflags '-s -w' \
     github.com/go-delve/delve/cmd/dlv \
     github.com/kisielk/errcheck \
     github.com/davidrjenni/reftools/cmd/fillstruct \
+    github.com/stamblerre/gocode \
     github.com/rogpeppe/godef \
     github.com/zmb3/gogetdoc \
     golang.org/x/tools/cmd/goimports \
     golang.org/x/lint/golint \
-    golang.org/x/tools/cmd/gopls \
-    github.com/alecthomas/gometalinter \
+    golang.org/x/tools/gopls \
     github.com/golangci/golangci-lint/cmd/golangci-lint \
     github.com/fatih/gomodifytags \
     golang.org/x/tools/cmd/gorename \
@@ -33,8 +33,7 @@ go get -u -buildmode=exe -ldflags '-s -w' \
     github.com/josharian/impl \
     honnef.co/go/tools/cmd/keyify \
     github.com/fatih/motion \
-    github.com/koron/iferr \
-    github.com/stamblerre/gocode
+    github.com/koron/iferr
 
 mv $GOBIN/gocode $GOBIN/gocode-gomod
 go get github.com/mdempsky/gocode
