@@ -1,11 +1,10 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 RUN apt update && apt install -y software-properties-common
 RUN add-apt-repository ppa:jonathonf/vim \
-    && add-apt-repository ppa:deadsnakes/ppa \
     && apt update \
     && apt install -y --no-install-recommends \
-		sudo git \
+		sudo git tree iputils-ping \
 		wget curl ca-certificates \
 		make g++ gcc libc6-dev \
 		locales pkg-config \
@@ -44,6 +43,7 @@ USER $HERMIT_UID
 ENV HOME=/home/hermit
 COPY --chown=hermit:wheel bashrc $HOME/.bashrc
 COPY --chown=hermit:wheel vimrc $HOME/.vimrc
+RUN vim +PluginDocs +qall!
 
 WORKDIR $HOME/work
 ENV GOPATH=$HOME/work/go

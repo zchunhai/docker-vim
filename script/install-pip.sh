@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eux
 
-PYTHON_PIP_VERSION=19.3.1
+PYTHON_PIP_VERSION=20.0.2
 wget --no-check-certificate -O get-pip.py 'https://bootstrap.pypa.io/get-pip.py'
 python get-pip.py \
     --disable-pip-version-check \
