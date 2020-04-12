@@ -1,30 +1,24 @@
 set nocompatible              " be iMproved, required
 filetype off                  " required
+filetype plugin indent on     " required
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-
-Plugin 'VundleVim/Vundle.vim'
-Plugin 'Shougo/unite.vim'
-Plugin 'scrooloose/nerdtree'
-Plugin 'majutsushi/tagbar'
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'jnurmine/Zenburn'
-Plugin 'Yggdroot/indentLine'
-Plugin 'mileszs/ack.vim'
-Plugin 'tpope/vim-dispatch'
-Plugin 'tpope/vim-fugitive'
-Plugin 'w0rp/ale'
-Plugin 'davidhalter/jedi-vim'
-Plugin 'fatih/vim-go'
-Plugin 'uarun/vim-protobuf'
-Plugin 'leafgarland/typescript-vim'
-
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
+call plug#begin('~/.vim/plugged')
+  Plug 'Shougo/denite.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+  Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+  Plug 'majutsushi/tagbar'
+  Plug 'vim-airline/vim-airline'
+  Plug 'vim-airline/vim-airline-themes'
+  Plug 'jnurmine/Zenburn'
+  Plug 'Yggdroot/indentLine'
+  Plug 'dyng/ctrlsf.vim'
+  Plug 'tpope/vim-fugitive'
+  Plug 'dense-analysis/ale'
+  Plug 'davidhalter/jedi-vim', { 'do': 'pip install --user --no-cache-dir Flake8' }
+  Plug 'fatih/vim-go', { 'tag': '*', 'do': ':GoUpdateBinaries' }
+  Plug 'uarun/vim-protobuf'
+call plug#end()
 
 let mapleader = "\<Space>"
 
@@ -151,7 +145,12 @@ let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
 let g:go_def_mode = 'godef'
 
-"" ack
-let g:ack_use_dispatch = 1
-let g:ackprg = 'ag --vimgrep'
-nnoremap <leader>/ * :Ack -w <C-r><C-w><cr>
+"" ctrlsf
+nmap     <C-F>f <Plug>CtrlSFPrompt
+vmap     <C-F>f <Plug>CtrlSFVwordPath
+vmap     <C-F>F <Plug>CtrlSFVwordExec
+nmap     <C-F>n <Plug>CtrlSFCwordPath
+nmap     <C-F>p <Plug>CtrlSFPwordPath
+nnoremap <C-F>o :CtrlSFOpen<CR>
+nnoremap <C-F>t :CtrlSFToggle<CR>
+inoremap <C-F>t <Esc>:CtrlSFToggle<CR>

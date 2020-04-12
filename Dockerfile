@@ -9,8 +9,8 @@ RUN add-apt-repository ppa:jonathonf/vim \
 		make g++ gcc libc6-dev \
 		locales pkg-config \
         vim ctags silversearcher-ag \
-        python3.8 python3.8-distutils \
-    && cd /usr/bin && ln -s pydoc3.8 pydoc && ln -s python3.8 python \
+        python3 python3-pip python3-venv python3-doc python3-distutils \
+    && cd /usr/bin && ln -s pydoc3 pydoc && ln -s python3 python && ln -s pip3 pip \
     && rm -rf /var/lib/apt/lists/*
 
 # Set the locale
@@ -27,24 +27,25 @@ RUN groupadd wheel -g 11 \
     && useradd -m -s /bin/bash -N -g wheel -u $HERMIT_UID $HERMIT_USER \
     && echo "$HERMIT_USER ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
-COPY ./script /tmp/script
-# Install pip
-RUN /tmp/script/install-pip.sh
 # Install golang
-RUN /tmp/script/install-go.sh
-ENV PATH=/usr/local/go/bin:$PATH
-# Install vim plugins
-RUN /tmp/script/install-vim-plugins.sh
-# Clean cache
-RUN	rm -rf /tmp/script && rm -rf /root/.cache && rm /root/.wget-hsts
+ENV GOLANG_VERSION=1.14 \
+    PATH=/usr/local/go/bin:$PATH
+RUN curl -sL "https://golang.org/dl/go${GOLANG_VERSION}.linux-amd64.tar.gz" | tar xzf - -C /usr/local/
 
 # User dotfiles
 USER $HERMIT_UID
-ENV HOME=/home/hermit
+ENV HOME=/home/hermit \
+    GOPATH=/home/hermit/work/go \
+    GOBIN=/home/hermit/.local/go/bin \
+    PATH=/home/hermit/.local/go/bin:/home/hermit/.local/bin:$PATH
 COPY --chown=hermit:wheel bashrc $HOME/.bashrc
 COPY --chown=hermit:wheel vimrc $HOME/.vimrc
-RUN vim +PluginDocs +qall!
+
+# Install vim plugins
+RUN mkdir -p $HOME/.vim/swapfiles \
+    && curl -fLo $HOME/.vim/autoload/plug.vim --create-dirs \
+       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim \
+    && (yes | vim +PlugInstall +qall!)
 
 WORKDIR $HOME/work
-ENV GOPATH=$HOME/work/go
 CMD exec /bin/bash -c "trap : TERM INT; sleep infinity & wait"
